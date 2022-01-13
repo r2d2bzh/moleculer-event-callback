@@ -1,0 +1,35 @@
+{
+  "name": "moleculer-event-callback",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "ava test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/r2d2bzh/moleculer-event-callback.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/r2d2bzh/moleculer-event-callback/issues"
+  },
+  "homepage": "https://github.com/r2d2bzh/moleculer-event-callback#readme",
+  "devDependencies": {
+    "@r2d2bzh/js-rules": "^0.7.1",
+    "ava": "^3.15.0",
+    "moleculer": "^0.14.19"
+  },
+  "dependencies": {
+    "p-timeout": "^5.0.2",
+    "uuid": "^8.3.2"
+  }
+}

@@ -1,0 +1,7 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+
+# tag::commands[]
+npx --no-install r2d2bzh-js-rules isWIP || npx --no-install eslint . && npm test
+# end::commands[]
