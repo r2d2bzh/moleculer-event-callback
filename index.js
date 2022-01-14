@@ -1,2 +1,2 @@
-export { addCallbackHandling } from './src/add-callback-handling.js';
-export { buildEventCallbackMixin } from './src/build-event-callback-mixin.js';
+export { callEventReturnDecorator } from './src/call-event-return-decorator.js';
+export { callEventMixin } from './src/call-event-mixin.js';

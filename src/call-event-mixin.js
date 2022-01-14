@@ -15,7 +15,7 @@ const findEventSubscribers = async (ctx, eventName) => {
   ];
 };
 
-export const eventEmitterMixin = ({ callbackName = '$$event-callback', timeout = 200 }) => {
+export const callEventMixin = ({ callbackName = '$$event-callback', timeout = 200 } = {}) => {
   const pendingEventHandler = new PendingEventHandler({ timeout });
   return {
     actions: {
@@ -27,7 +27,7 @@ export const eventEmitterMixin = ({ callbackName = '$$event-callback', timeout =
         }),
     },
     methods: {
-      $$cemit: async (ctx, { eventName, payload: originalPayload, opts }) => {
+      $$callEvent: async (ctx, { eventName, payload: originalPayload, opts }) => {
         const identifier = uuid();
         const payload = {
           ...originalPayload,
@@ -36,7 +36,7 @@ export const eventEmitterMixin = ({ callbackName = '$$event-callback', timeout =
             callbackAction: `${ctx.service.name}.${callbackName}`,
           },
         };
-        const eventResponses = pendingEventHandler({
+        const eventResponses = pendingEventHandler.getEventResponses({
           identifier,
           eventSubscribers: await findEventSubscribers(ctx, eventName),
         });
