@@ -1,4 +1,4 @@
-const handleEvent = async (eventHandler, { validate, eventParamsSchema, eventParams }) => {
+const handleEvent = async (eventHandler, { validate, eventParamsSchema = {}, eventParams }) => {
   try {
     await validate(eventParams, eventParamsSchema);
     // Without the await, the error will be handled by a global handler
@@ -8,7 +8,7 @@ const handleEvent = async (eventHandler, { validate, eventParamsSchema, eventPar
   }
 };
 
-export const addCallbackHandling = ({ handler: originalHandler, params: originalParams, ...eventSpec }) => ({
+export const callEventReturnDecorator = ({ handler: originalHandler, params: originalParams, ...eventSpec }) => ({
   handler: async (ctx) => {
     const {
       params: {
@@ -24,7 +24,7 @@ export const addCallbackHandling = ({ handler: originalHandler, params: original
           eventParamsSchema: {
             ...originalParams,
             $$eventReturnHandler: {
-              $$type: Object,
+              $$type: 'object',
               identifier: { type: 'uuid' },
               callbackAction: { type: 'string' },
             },

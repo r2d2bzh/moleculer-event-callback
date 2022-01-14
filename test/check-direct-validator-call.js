@@ -32,3 +32,16 @@ test('failed validation', (t) => {
     )
   );
 });
+
+test('validation no schema', (t) => {
+  const broker = new ServiceBroker();
+
+  t.snapshot(() =>
+    broker.validator.validate(
+      {
+        param1: 1,
+      },
+      {}
+    )
+  );
+});
