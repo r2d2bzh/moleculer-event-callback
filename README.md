@@ -14,4 +14,4 @@ Two helpers are provided in order to implement this feature:
 * On the subscriber side, the `callEventReturnDecorator` function decorates a Moleculer event schema specification.
   The decorator ensures that the subscriber's event handler returned value or raised error is sent back through the emitter callback action.
 
-For a code example, see [the following unit test](test/call-event-mixin.js#L32-57).
+For a code example, see [the following unit test](test/call-event-mixin.js#L32-L57).
