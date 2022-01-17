@@ -2,7 +2,9 @@ import test from 'ava';
 import { ServiceBroker } from 'moleculer';
 
 test('successful validation', (t) => {
-  const broker = new ServiceBroker();
+  const broker = new ServiceBroker({
+    logLevel: { '**': 'none' },
+  });
 
   t.snapshot(
     broker.validator.validate(
@@ -17,7 +19,9 @@ test('successful validation', (t) => {
 });
 
 test('failed validation', (t) => {
-  const broker = new ServiceBroker();
+  const broker = new ServiceBroker({
+    logLevel: { '**': 'none' },
+  });
 
   t.snapshot(
     t.throws(() =>
@@ -34,7 +38,9 @@ test('failed validation', (t) => {
 });
 
 test('validation no schema', (t) => {
-  const broker = new ServiceBroker();
+  const broker = new ServiceBroker({
+    logLevel: { '**': 'none' },
+  });
 
   t.snapshot(() =>
     broker.validator.validate(

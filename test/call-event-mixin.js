@@ -1,6 +1,5 @@
 import test from 'ava';
-import { callEventMixin } from '../src/call-event-mixin.js';
-import { callEventReturnDecorator } from '../src/call-event-return-decorator.js';
+import { callEventReturnDecorator, callEventMixin } from '../index.js';
 import { ServiceBroker } from 'moleculer';
 
 const runBroker = async (broker, ...services) => {
@@ -28,6 +27,7 @@ test('event handler nominal case', async (t) => {
   const emitterBroker = new ServiceBroker({
     nodeID: 'emitter',
     transporter: 'TCP',
+    logLevel: { '**': 'none' },
   });
   await runBroker(emitterBroker, {
     name: 'emitter',
@@ -43,6 +43,7 @@ test('event handler nominal case', async (t) => {
     new ServiceBroker({
       nodeID: 'receiver',
       transporter: 'TCP',
+      logLevel: { '**': 'none' },
     }),
     {
       name: 'receiver',
