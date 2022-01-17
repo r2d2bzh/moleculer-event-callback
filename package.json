@@ -1,5 +1,5 @@
 {
-  "name": "moleculer-event-callback",
+  "name": "@r2d2bzh/moleculer-event-callback",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
@@ -11,6 +11,9 @@
     "lint": "eslint .",
     "pretest": "npm run lint",
     "test": "ava test"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
