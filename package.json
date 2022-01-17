@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
-    "test": "ava test"
+    "test": "ava"
   },
   "publishConfig": {
     "access": "public"
