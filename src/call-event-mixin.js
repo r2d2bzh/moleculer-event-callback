@@ -1,8 +1,8 @@
 import { v4 as uuid } from 'uuid';
 import PendingEventHandler from './pending-event-handler.js';
 
-const findEventSubscribers = async (ctx, eventName) => {
-  const servicesEvents = await ctx.call('$node.services', { withEvents: true });
+const findEventSubscribers = async (context, eventName) => {
+  const servicesEvents = await context.call('$node.services', { withEvents: true });
 
   return [
     ...new Set(
@@ -19,28 +19,28 @@ export const callEventMixin = ({ callbackName = '$$event-callback', timeout = 20
   const pendingEventHandler = new PendingEventHandler({ timeout });
   return {
     actions: {
-      [callbackName]: (ctx) =>
+      [callbackName]: (context) =>
         pendingEventHandler.respond({
-          identifier: ctx.params.identifier,
-          caller: ctx.caller,
-          returnValue: ctx.params.returnValue,
+          identifier: context.params.identifier,
+          caller: context.caller,
+          returnValue: context.params.returnValue,
         }),
     },
     methods: {
-      $$callEvent: async (ctx, { eventName, payload: originalPayload, opts }) => {
+      $$callEvent: async (context, { eventName, payload: originalPayload, opts }) => {
         const identifier = uuid();
         const payload = {
           ...originalPayload,
           $$eventReturnHandler: {
             identifier,
-            callbackAction: `${ctx.service.name}.${callbackName}`,
+            callbackAction: `${context.service.name}.${callbackName}`,
           },
         };
         const eventResponses = pendingEventHandler.getEventResponses({
           identifier,
-          eventSubscribers: await findEventSubscribers(ctx, eventName),
+          eventSubscribers: await findEventSubscribers(context, eventName),
         });
-        await ctx.emit(eventName, payload, opts);
+        await context.emit(eventName, payload, opts);
         return Promise.all(eventResponses);
       },
     },

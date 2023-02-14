@@ -1,6 +1,6 @@
-const handleEvent = async (eventHandler, { validate, eventParamsSchema = {}, eventParams }) => {
+const handleEvent = async (eventHandler, { validate, eventParamsSchema: eventParametersSchema = {}, eventParams }) => {
   try {
-    await validate(eventParams, eventParamsSchema);
+    await validate(eventParams, eventParametersSchema);
     // Without the await, the error will be handled by a global handler
     return await eventHandler();
   } catch (error) {
@@ -11,37 +11,40 @@ const handleEvent = async (eventHandler, { validate, eventParamsSchema = {}, eve
 export const callEventReturnDecorator = (eventSchema) => {
   const {
     handler: originalHandler,
-    params: originalParams = {},
+    params: originalParameters = {},
     ...eventSpec
   } = eventSchema instanceof Function ? { handler: eventSchema } : eventSchema;
 
   return {
-    handler: async (ctx) => {
+    handler: async (context) => {
       const {
+        broker,
+        nodeID,
+        params,
         params: {
           $$eventReturnHandler: { callbackAction, identifier },
         },
-      } = ctx;
-      return ctx.call(
+      } = context;
+      return context.call(
         callbackAction,
         {
           identifier,
-          returnValue: await handleEvent(() => originalHandler(ctx), {
-            validate: ctx.broker.validator.validate.bind(ctx.broker.validator),
+          returnValue: await handleEvent(() => originalHandler(context), {
+            validate: broker.validator.validate.bind(broker.validator),
             eventParamsSchema: {
-              ...originalParams,
+              ...originalParameters,
               $$eventReturnHandler: {
                 $$type: 'object',
                 identifier: { type: 'uuid' },
                 callbackAction: { type: 'string' },
               },
             },
-            eventParams: ctx.params,
+            eventParams: params,
           }),
         },
         {
           // ensure to call back the event emitter node
-          nodeID: ctx.nodeID,
+          nodeID,
         }
       );
     },

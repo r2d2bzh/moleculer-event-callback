@@ -3,14 +3,16 @@ import { callEventReturnDecorator, callEventMixin } from '../index.js';
 import { ServiceBroker } from 'moleculer';
 
 const runBroker = async (broker, ...services) => {
-  services.forEach((service) => broker.createService(service));
+  for (const service of services) broker.createService(service);
   await broker.start();
 
   return broker.waitForServices(services.map(({ name }) => name));
 };
 
 const waitForEventDiscovery = async (broker, eventName) => {
-  while (!(await broker.call('$node.events')).filter((event) => event.name === eventName).length) {
+  // need to be re-evaluated on each loop
+  // eslint-disable-next-line unicorn/no-await-expression-member
+  while ((await broker.call('$node.events')).filter((event) => event.name === eventName).length === 0) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 };
@@ -33,8 +35,8 @@ test('event handler nominal case', async (t) => {
     name: 'emitter',
     mixins: [callEventMixin()],
     actions: {
-      'emit-event-with-callback': function (ctx) {
-        return this.$$callEvent(ctx, { eventName: 'event', payload: ctx.params });
+      'emit-event-with-callback': function (context) {
+        return this.$$callEvent(context, { eventName: 'event', payload: context.params });
       },
     },
   });
@@ -49,8 +51,8 @@ test('event handler nominal case', async (t) => {
       name: 'receiver',
       events: {
         event: callEventReturnDecorator({
-          handler: (ctx) => {
-            return `event called with params: ${JSON.stringify(cleanEventResponse(ctx.params))}`;
+          handler: (context) => {
+            return `event called with params: ${JSON.stringify(cleanEventResponse(context.params))}`;
           },
         }),
       },
