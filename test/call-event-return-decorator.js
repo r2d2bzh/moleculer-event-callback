@@ -6,12 +6,12 @@ test('event parameter validation', async (t) => {
     params: {
       param1: { type: 'string' },
     },
-    handler: (ctx) => {
-      return ctx.params;
+    handler: (context) => {
+      return context.params;
     },
   };
   await callEventReturnDecorator(eventSchema).handler({
-    call: (...args) => t.snapshot(args),
+    call: (...arguments_) => t.snapshot(arguments_),
     params: {
       $$eventReturnHandler: {
         identifier: 'id',
@@ -28,12 +28,12 @@ test('error during event parameter validation', async (t) => {
     params: {
       param1: { type: 'string' },
     },
-    handler: (ctx) => {
-      return ctx.params;
+    handler: (context) => {
+      return context.params;
     },
   };
   await callEventReturnDecorator(eventSchema).handler({
-    call: (...args) => t.snapshot(args),
+    call: (...arguments_) => t.snapshot(arguments_),
     params: {
       $$eventReturnHandler: {
         identifier: 'id',
@@ -52,9 +52,8 @@ test('error during event parameter validation', async (t) => {
 });
 
 test('simple handler schema', async (t) => {
-  const eventSchema = (ctx) => ctx.params;
-  await callEventReturnDecorator(eventSchema).handler({
-    call: (...args) => t.snapshot(args),
+  await callEventReturnDecorator((context) => context.params).handler({
+    call: (...arguments_) => t.snapshot(arguments_),
     params: {
       $$eventReturnHandler: {
         identifier: 'id',

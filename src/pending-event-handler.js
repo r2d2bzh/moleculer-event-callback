@@ -1,4 +1,4 @@
-import EventEmitter from 'events';
+import EventEmitter from 'node:events';
 import pTimeout from 'p-timeout';
 
 export default class PendingEventHandler extends EventEmitter {
@@ -9,7 +9,9 @@ export default class PendingEventHandler extends EventEmitter {
 
   getEventResponses({ identifier, eventSubscribers }) {
     return eventSubscribers.map((eventSubscriber) =>
-      pTimeout(new Promise((resolve) => this.once(`${identifier}.${eventSubscriber}`, resolve)), this.timeout)
+      pTimeout(new Promise((resolve) => this.once(`${identifier}.${eventSubscriber}`, resolve)), {
+        milliseconds: this.timeout,
+      })
     );
   }
 
