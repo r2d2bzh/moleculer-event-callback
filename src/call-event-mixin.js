@@ -8,9 +8,9 @@ const findEventSubscribers = async (context, eventName) => {
     ...new Set(
       servicesEvents
         // eventName is not a user input but a developer one
-        // eslint-disable-next-line security/detect-object-injection
-        .filter((service) => service.available && !!service.events[eventName])
-        .map((service) => service.name)
+
+        .filter((service) => service.available && !!Object.hasOwn(service.events, eventName))
+        .map((service) => service.name),
     ),
   ];
 };

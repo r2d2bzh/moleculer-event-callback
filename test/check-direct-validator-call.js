@@ -13,8 +13,8 @@ test('successful validation', (t) => {
       },
       {
         param1: { type: 'string' },
-      }
-    )
+      },
+    ),
   );
 });
 
@@ -31,9 +31,9 @@ test('failed validation', (t) => {
         },
         {
           param1: { type: 'string' },
-        }
-      )
-    )
+        },
+      ),
+    ),
   );
 });
 
@@ -47,7 +47,7 @@ test('validation no schema', (t) => {
       {
         param1: 1,
       },
-      {}
-    )
+      {},
+    ),
   );
 });

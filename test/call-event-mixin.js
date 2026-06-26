@@ -36,6 +36,7 @@ test('event handler nominal case', async (t) => {
     mixins: [callEventMixin()],
     actions: {
       'emit-event-with-callback': function (context) {
+        // eslint-disable-next-line unicorn/no-this-outside-of-class
         return this.$$callEvent(context, { eventName: 'event', payload: context.params });
       },
     },
@@ -56,7 +57,7 @@ test('event handler nominal case', async (t) => {
           },
         }),
       },
-    }
+    },
   );
 
   await waitForEventDiscovery(emitterBroker, 'event');

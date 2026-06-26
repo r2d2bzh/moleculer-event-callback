@@ -13,18 +13,14 @@ export const callEventReturnDecorator = (eventSchema) => {
     handler: originalHandler,
     params: originalParameters = {},
     ...eventSpec
-  } = eventSchema instanceof Function ? { handler: eventSchema } : eventSchema;
+  } = typeof eventSchema === 'function' ? { handler: eventSchema } : eventSchema;
 
   return {
     handler: async (context) => {
+      const { broker, nodeID, params } = context;
       const {
-        broker,
-        nodeID,
-        params,
-        params: {
-          $$eventReturnHandler: { callbackAction, identifier },
-        },
-      } = context;
+        $$eventReturnHandler: { callbackAction, identifier },
+      } = params;
       return context.call(
         callbackAction,
         {
@@ -45,7 +41,7 @@ export const callEventReturnDecorator = (eventSchema) => {
         {
           // ensure to call back the event emitter node
           nodeID,
-        }
+        },
       );
     },
     ...eventSpec,

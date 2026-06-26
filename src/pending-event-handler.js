@@ -1,6 +1,7 @@
 import EventEmitter from 'node:events';
 import pTimeout from 'p-timeout';
 
+// eslint-disable-next-line unicorn/prefer-event-target
 export default class PendingEventHandler extends EventEmitter {
   constructor({ timeout }) {
     super();
@@ -11,7 +12,7 @@ export default class PendingEventHandler extends EventEmitter {
     return eventSubscribers.map((eventSubscriber) =>
       pTimeout(new Promise((resolve) => this.once(`${identifier}.${eventSubscriber}`, resolve)), {
         milliseconds: this.timeout,
-      })
+      }),
     );
   }
 
